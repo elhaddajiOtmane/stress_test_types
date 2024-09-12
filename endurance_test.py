@@ -2,8 +2,8 @@ import requests
 import threading
 import time
 
-url = 'http://e-planner.somee.com/'
-num_threads = 10
+url = 'http://e-planner.somee.com/admin/admin.aspx'
+num_threads = 100
 
 def send_request():
     while True:

