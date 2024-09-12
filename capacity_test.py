@@ -2,7 +2,7 @@ import requests
 import threading
 
 url = 'http://e-planner.somee.com/'
-num_threads = 50  # Gradually increase to find capacity
+num_threads = 5000000000000000000000  # Gradually increase to find capacity
 
 def send_request():
     try:
